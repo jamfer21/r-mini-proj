@@ -1,0 +1,66 @@
+---
+title: "Group project"
+author: "Jack Hickey"
+date: "11/20/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+# {.tabset}
+## Introduction 
+
+This project aims to analyze road accident casualties in Ireland from 2005-2018. The analysis will include a variety of comparisons between different kinds of road users, of a range of age groups, across both genders.
+
+__Objective:__ The goal of this project is to determine trends in casualty rates of different cohorts, produce graphical explanations for these trends and ultimately through predictive analysis, determine what directions these trends seem to be heading towards in the future. 
+
+## Cleaning
+
+```{r}
+#import
+setwd("~/Downloads")
+library(pxR)
+library(tidyverse)
+d<-as.data.frame(read.px("ROA16.px"))
+
+str(d)
+
+#check for na's
+sapply(d, function(x) which(is.na(x)))
+
+```
+
+## Visual Analysis
+
+```{r}
+#male vs female passenger casualties
+male_passengers<-subset(d, Road.User.Type=='Car passengers' & Age.Group=='All ages' & Statistic=='All Killed and Injured Casualties (Number)' & Sex=='Male')
+female_passengers<-subset(d, Road.User.Type=='Car passengers' & Age.Group=='All ages' & Statistic=='All Killed and Injured Casualties (Number)' & Sex=='Female')
+male_female_peddiff<-boxplot(female_passengers$value,male_passengers$value, ylab='Casualties', names=c('Female','Male'), main='Male vs Female passenger casualties',col=c("orange","light blue"))
+
+#boy vs girl passenger casualties
+boy_passengers<-subset(d, Road.User.Type=='Car passengers' & Age.Group==c('0 - 5 years','6 - 9 years','10 - 14 years','15 - 17 years') & Statistic=='All Killed and Injured Casualties (Number)' & Sex=='Male')
+girl_passengers<-subset(d, Road.User.Type=='Car passengers' & Age.Group==c('0 - 5 years','6 - 9 years','10 - 14 years','15 - 17 years') & Statistic=='All Killed and Injured Casualties (Number)' & Sex=='Female')
+boy_girl_peddiff<-boxplot(girl_passengers$value,boy_passengers$value, ylab='Casualties', names=c('Girls','Boys'), main='Boys vs Girl passenger casualties',col=c("orange","light blue"))
+
+#casualties per year for pedal cyclists...trending up!!
+x_bike<-subset(d, Statistic=='All Killed and Injured Casualties (Number)' & Road.User.Type=='Pedal cyclists')
+x1_bike<-x_bike$value
+y_bike<-x_bike$Year
+qplot(Year,value, data=x_bike, geom="col",main="Bicyclist total casualties")
+
+#casualties per year for motor cyclists... lowered from 05-13, rising since
+x_mbike<-subset(d, Statistic=='All Killed and Injured Casualties (Number)' & Road.User.Type=='Motor cyclists')
+x1_mbike<-x_mbike$value
+y_mbike<-x_mbike$Year
+qplot(Year,value, data=x_mbike, geom="col",main="Motor cyclists total casualties")
+
+
+```
+
+## Predictive analysis
+```{r}
+
+```
+
