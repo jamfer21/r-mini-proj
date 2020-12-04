@@ -23,6 +23,8 @@ setwd("~/Downloads")
 library(pxR)
 library(tidyverse)
 d<-as.data.frame(read.px("ROA16.px"))
+names(d)<-c("Statistic","Year","Road.User.Type","Sex","Age.Group","Value")
+
 
 str(d)
 
@@ -61,6 +63,13 @@ qplot(Year,value, data=x_mbike, geom="col",main="Motor cyclists total casualties
 
 ## Predictive analysis
 ```{r}
+d1<-subset(d2, Statistic=="All Killed and Injured Casualties (Number)")
+f<-lm(Value~Year+Road.User.Type+Sex+Age.Group, data=d2) #year had no significance
+f
+summary(f)
 
+f1<-lm(Value~Road.User.Type+Sex+Age.Group, data=d2)
+f1
+summary(f1)
 ```
 
