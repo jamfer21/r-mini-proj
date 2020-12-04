@@ -61,7 +61,7 @@ qplot(Year,value, data=x_mbike, geom="col",main="Motor cyclists total casualties
 
 ```
 
-## Predictive analysis
+## Regression and Predictive analysis
 ```{r}
 d1<-subset(d2, Statistic=="All Killed and Injured Casualties (Number)")
 f<-lm(Value~Year+Road.User.Type+Sex+Age.Group, data=d2) #year had no significance
