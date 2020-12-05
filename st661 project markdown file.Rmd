@@ -79,11 +79,18 @@ d3<-subset(d1, Statistic=="All Killed and Injured Casualties (Number)" & Road.Us
 f3<-lm(Value~Sex, data=d3)
 f3
 summary(f3)
+anova(f4)
+plot(f4, which=2)
+
 
 d4<-subset(d1, Statistic=="All Killed and Injured Casualties (Number)" & Road.User.Type=="Car drivers" & Age.Group=="All ages")
 f4<-lm(Value~Sex, data=d4)
 f4
 summary(f4)
+anova(f4)
+plot(f4, which=2)
+
+
 
 #From the two linear models (f3 and f4) above we can see a clear pattern for which gender is more injured from different categories..
 # for f3: ŷ = b0 + b1x => ŷ = 904.79 + 151.50x where ŷ is the value of the "All killed or injured" statistic for Car passengers, b0 is the Y intercept, ie when females=0, thus this is the predicted value of the male Car passengers, + b1 is the predicted change Value for a change of one in females. This can also be interpreted to say that being a female results in an increase in the casualties value of 151.50 when compared to males for this data.
