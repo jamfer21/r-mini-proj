@@ -99,3 +99,14 @@ plot(f4, which=2)
 
 #So clearly from the linear models here the data interestingly shows that females are much less likely to be killed or injured as drivers but far more likely as passengers. So it is the question to ask are Females better drivers than males (and worse passengers) or is the data simply skewed by the fact that males are far more likely to be the driver and females the passenger and hence they become the statistic for these data points?
 
+#lm of motor cyclists (f5) and pedal cyclists (f6) all ages
+d5<-subset(d1, Statistic=="All Killed and Injured Casualties (Number)" & Road.User.Type=="Motor cyclists" & Age.Group=="All ages")
+f5<-lm(Value~Sex, data=d5)
+f5
+summary(f5) #more male motor cyclists predicted
+
+d6<-subset(d1, Statistic=="All Killed and Injured Casualties (Number)" & Road.User.Type=="Pedal cyclists" & Age.Group=="All ages")
+f6<-lm(Value~Sex, data=d6)
+f6
+summary(f6) #more male pedal cyclists predicted
+
