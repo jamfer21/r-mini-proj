@@ -63,13 +63,32 @@ qplot(Year,value, data=x_mbike, geom="col",main="Motor cyclists total casualties
 
 ## Regression and Predictive analysis
 ```{r}
-d1<-subset(d2, Statistic=="All Killed and Injured Casualties (Number)")
-f<-lm(Value~Year+Road.User.Type+Sex+Age.Group, data=d2) #year had no significance
-f
-summary(f)
+d<-as.data.frame(read.px("ROA16.px"))
 
-f1<-lm(Value~Road.User.Type+Sex+Age.Group, data=d2)
+d1<-subset(d, Statistic=="All Killed and Injured Casualties (Number)")
+f<-lm(Value~Year+Road.User.Type+Sex+Age.Group, data=d1) 
+f
+summary(f) #year had no significance
+
+f1<-lm(Value~Road.User.Type+Sex+Age.Group, data=d1)
 f1
 summary(f1)
-```
+
+#predictive analysis between sex and different road user types
+d3<-subset(d1, Statistic=="All Killed and Injured Casualties (Number)" & Road.User.Type=="Car passengers" & Age.Group=="All ages")
+f3<-lm(Value~Sex, data=d3)
+f3
+summary(f3)
+
+d4<-subset(d1, Statistic=="All Killed and Injured Casualties (Number)" & Road.User.Type=="Car drivers" & Age.Group=="All ages")
+f4<-lm(Value~Sex, data=d4)
+f4
+summary(f4)
+
+#From the two linear models (f3 and f4) above we can see a clear pattern for which gender is more injured from different categories..
+# for f3: ŷ = b0 + b1x => ŷ = 904.79 + 151.50x where ŷ is the value of the "All killed or injured" statistic for Car passengers, b0 is the Y intercept, ie when females=0, thus this is the predicted value of the male Car passengers, + b1 is the predicted change Value for a change of one in females. This can also be interpreted to say that being a female results in an increase in the casualties value of 151.50 when compared to males for this data.
+
+# for f4:  ŷ = b0 + b1x => ŷ = 1778.8 - 200.5xwhere ŷ is the value of the "All killed or injured" statistic for Car drivers, b0 is the Y intercept, again when females=0. So it can be seen from this linear model that this time the b1 is negative indicating that the female injury value is lower than the males this time.
+
+#So clearly from the linear models here the data interestingly shows that females are much less likely to be killed or injured as drivers but far more likely as passengers. So it is the question to ask are Females better drivers than males (and worse passengers) or is the data simply skewed by the fact that males are far more likely to be the driver and females the passenger and hence they become the statistic for these data points?
 
