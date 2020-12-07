@@ -75,6 +75,7 @@ sum.male.car_drivers <- aggregate(value~Year, df.male.car_drivers, sum)
 
 prop.male = round(sum.male.car_drivers$value/sum.male$value, 2)
 prop.male
+
 ```
 
 
