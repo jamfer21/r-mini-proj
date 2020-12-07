@@ -1,0 +1,72 @@
+---
+title: "Project graphics"
+author: "Kaimo Zhang"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, fig.width=4, fig.height=4)
+```
+
+
+```{r}
+library(pxR)
+library(ggplot2)
+library(tidyverse)
+ROA16<-as.data.frame(read.px("ROA16.px"))
+df1<-subset(ROA16,Statistic=="Killed Casualties (Number)"&Age.Group=="All ages"&Road.User.Type != "All Car users"&Road.User.Type != "All road users")
+df2<-subset(ROA16,Statistic=="Injured Cassualties (Number)"&Age.Group=="All ages"&Road.User.Type != "All Car users"&Road.User.Type != "All road users")
+df3<-subset(ROA16,Statistic=="Killed Casualties (Number)"&Age.Group!="All ages"&Road.User.Type == "All road users")
+df4<-subset(ROA16,Statistic=="Injured Cassualties (Number)"&Age.Group!="All ages"&Road.User.Type == "All road users")
+```
+
+Killed Casualties divided by Year & Sex
+```{r}
+ggplot(data = df1) + geom_bar(mapping = aes(x = Year, y=value, fill=Sex), stat="identity")
+```
+
+Killed Casualties divided by Year & Road.User.Type
+```{r}
+ggplot(data = df1) + geom_bar(mapping = aes(x = Year, y=value, fill=Road.User.Type), stat="identity")
+```
+
+Killed Casualties divided by Year & Age.Group
+```{r}
+ggplot(data = df3) + geom_bar(mapping = aes(x = Year, y=value, fill=Age.Group), stat="identity")
+```
+
+Killed Casualties divided by Road.User.Type & Sex
+```{r}
+ggplot(data = df1) + geom_bar(mapping = aes(x = Road.User.Type, y=value, fill=Sex), stat="identity")
+```
+
+Killed Casualties divided by Age.Group & Sex
+```{r}
+ggplot(data = df3) + geom_bar(mapping = aes(x = Age.Group, y=value, fill=Sex), stat="identity")
+```
+
+Injured Cassualties divided by Year & Sex
+```{r}
+ggplot(data = df2) + geom_bar(mapping = aes(x = Year, y=value, fill=Sex), stat="identity")
+```
+
+Injured Cassualties divided by Year & Road.User.Type
+```{r}
+ggplot(data = df2) + geom_bar(mapping = aes(x = Year, y=value, fill=Road.User.Type), stat="identity")
+```
+
+Injured Cassualties divided by Year & Age.Group
+```{r}
+ggplot(data = df4) + geom_bar(mapping = aes(x = Year, y=value, fill=Age.Group), stat="identity")
+```
+
+Injured Cassualties divided by Road.User.Type & Sex
+```{r}
+ggplot(data = df2) + geom_bar(mapping = aes(x = Road.User.Type, y=value, fill=Sex), stat="identity")
+```
+
+Injured Cassualties divided by Age.Group & Sex
+```{r}
+ggplot(data = df4) + geom_bar(mapping = aes(x = Age.Group, y=value, fill=Sex), stat="identity")
+```
