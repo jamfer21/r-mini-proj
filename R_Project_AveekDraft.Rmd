@@ -1,0 +1,115 @@
+---
+title: "R_PROJECT"
+author: "AVEEK DAS"
+date: "12/6/2020"
+output: html_document
+---
+
+### Understanding the Road User Type based on Age Group and Gender
+
+```{r}
+library(pxR)
+library(ggplot2)
+library(tidyverse)
+df = as.data.frame(read.px("ROA16.px"))
+head(df)
+```
+
+```{r}
+
+# Filter all the redundant data
+
+df.not.all_killed_injured <- df %>%
+  filter(df$Statistic != "All Killed and Injured Casualties (Number)")
+  
+df.not.all_road_users <- df.not.all_killed_injured %>%  
+  filter(df.not.all_killed_injured$Road.User.Type != "All road users")
+
+df.not.all_car_users <- df.not.all_road_users %>%  
+  filter(df.not.all_road_users$Road.User.Type != "All Car users")
+
+df.not.all_ages <- df.not.all_car_users %>%  
+  filter(df.not.all_car_users$Age.Group != 'All ages')
+
+df <- df.not.all_ages
+
+sum(df$value) #112279
+```
+
+```{r}
+p<-ggplot(data=df, aes(x=Road.User.Type, y=value)) +
+  geom_bar(stat="identity")
+p
+```
+
+
+```{r}
+ggplot(data=df, aes(x=Road.User.Type, y=value, fill=Statistic), position = "fill") +
+  geom_bar(stat="identity")
+```
+
+From the above, we can conclude that the Car Drivers having the highest Casualties Count.
+
+
+#### Driving Casualities by Gender per Year
+
+```{r}
+df.female = df[df$Sex == 'Female',]
+sum.female <- aggregate(value~Year, df.female, sum)
+
+df.female.car_drivers = df[df$Road.User.Type == "Car drivers" & df$Sex == 'Female',]
+sum.female.car_drivers <- aggregate(value~Year, df.female.car_drivers, sum)
+
+prop.female = round(sum.female.car_drivers$value/sum.female$value, 2)
+prop.female
+
+
+
+
+
+df.male = df[df$Sex == 'Male', ]
+sum.male <- aggregate(value~Year, df.male, sum)
+
+df.male.car_drivers = df[df$Road.User.Type == "Car drivers" & df$Sex == 'Male', ]
+sum.male.car_drivers <- aggregate(value~Year, df.male.car_drivers, sum)
+
+prop.male = round(sum.male.car_drivers$value/sum.male$value, 2)
+prop.male
+```
+
+
+### Proportion of Male and Female Car Driving Death Casualties Trend over 14 years.
+
+```{r}
+df.killed.female.car_drivers = df[df$Statistic =='Killed Casualties (Number)' & df$Road.User.Type == "Car drivers" & df$Sex == 'Female', ]
+sum.killed.female.car_drivers <- aggregate(value~Year, df.killed.female.car_drivers, sum)
+
+df.female.car_drivers = df[df$Road.User.Type == "Car drivers" & df$Sex == 'Female', ]
+sum.female.car_drivers <- aggregate(value~Year, df.female.car_drivers, sum)
+
+killed.female.prop = round(sum.killed.female.car_drivers$value/sum.female.car_drivers$value, 2)
+killed.female.prop
+
+
+
+
+df.killed.male.car_drivers = df[df$Statistic =='Killed Casualties (Number)' & df$Road.User.Type == "Car drivers" & df$Sex == 'Male', ]
+sum.killed.male.car_drivers <- aggregate(value~Year, df.killed.male.car_drivers, sum)
+
+df.male.car_drivers = df[df$Road.User.Type == "Car drivers" & df$Sex == 'Male', ]
+sum.male.car_drivers <- aggregate(value~Year, df.male.car_drivers, sum)
+killed.male.prop = round(sum.killed.male.car_drivers$value/sum.male.car_drivers$value, 2)
+killed.male.prop
+```
+
+# Categorical Count of AGe Group WIse Casualties for 14 years.
+
+```{r}
+ggplot(data=df, aes(x=Age.Group, y=value, fill=Statistic), position = "fill") +
+  geom_bar(stat="identity")
+```
+
+
+# The age group containing 25-34 years has the highest number of casualities.
+
+From the above we can conclude that the Road User Type of Pedal Cyclist has an increasing trend of casualties over the years. However, the proportions of fatalities is minimum.
