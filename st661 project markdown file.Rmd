@@ -22,18 +22,53 @@ __Objective:__ The goal of this project is to determine trends in casualty rates
 setwd("~/Downloads")
 library(pxR)
 library(tidyverse)
-d<-as.data.frame(read.px("ROA16.px"))
-names(d)<-c("Statistic","Year","Road.User.Type","Sex","Age.Group","Value")
+df<-as.data.frame(read.px("ROA16.px"))
+names(df)<-c("Statistic","Year","Road.User.Type","Sex","Age.Group","Value")
 
 
-str(d)
+str(df)
 
 #check for na's
-sapply(d, function(x) which(is.na(x)))
+sapply(df, function(x) which(is.na(x)))
 
 ```
 
 ## Visual Analysis
+
+```{r}
+ggplot(data=df, aes(x=Age.Group, y=Value, fill=Statistic), position = "fill") +
+  geom_bar(stat="identity") +
+  coord_flip()
+ggplot(data=df, aes(x=Age.Group, y=Value, fill=Road.User.Type), position = "fill") +
+  geom_bar(stat="identity") +
+  coord_flip()
+```
+We can see from the first plot the 25-34 year olds are by far the highest category in terms of casualties in this dataset. Here we are going to look deeper into the younger casualties on Irish roads.
+
+```{r}
+ s4<- df[df$Statistic=='Injured Cassualties (Number)' & (df$Road.User.Type == 'Car drivers' | df$Road.User.Type=='Motor cyclists'| df$Road.User.Type=='Pedal cyclists') & (df$Age.Group == '15 - 17 years' | df$Age.Group == '18 - 20 years' | df$Age.Group == '21 - 24 years' | df$Age.Group == '25 - 34 years'),]
+ggplot(sub4, aes(x=Road.User.Type,y=Value, fill=Road.User.Type)) +
+  geom_col() +
+  ggtitle("Younger casualties") +
+  scale_fill_manual(values = c("#8489EF", "#E7B800", "#AC1E07")) + 
+  facet_wrap(~Age.Group,scale="free_y")
+```
+
+```{r}
+w<-df[df$Age.Group=='15 - 17 years',]
+w1<-df[df$Age.Group=='18 - 20 years',]
+w2<-df[df$Age.Group=='21 - 24 years',]
+sum(c(w$Value,w1$Value,w2$Value))
+
+w3<-df[df$Age.Group=='24 - 34 years',]
+w4<-df[df$Age.Group=='35 - 44 years',]
+w5<-df[df$Age.Group=='45 - 54 years',]
+w6<-df[df$Age.Group=='55 - 64 years',]
+w7<-df[df$Age.Group=='65 years and over',]
+sum(c(w$Value,w1$Value,w2$Value,w3$Value,w4$Value,w5$Value,w6$Value,w7$Value))
+```
+According to the RSA online data revealing drivers licences numbers held by Irish drivers (https://data.cso.ie/) in 2018 there were 233187 drivers ages 17-24 on our roads. From the Casualties data we can calculate that the percentage of these drivers to be recorded killed or injured is: 27204/233187 = 0.1166617 where as when we take the total for the whole population and compare it we get : 76347/2907193 = 0.02626141. So when we compare the younger drivers to the overall population there is a 9% increase in casualties when comapared to the total amount of drivers on the roads.
+
 
 ```{r}
 #male vs female passenger casualties
@@ -41,10 +76,6 @@ male_passengers<-subset(d, Road.User.Type=='Car passengers' & Age.Group=='All ag
 female_passengers<-subset(d, Road.User.Type=='Car passengers' & Age.Group=='All ages' & Statistic=='All Killed and Injured Casualties (Number)' & Sex=='Female')
 male_female_peddiff<-boxplot(female_passengers$value,male_passengers$value, ylab='Casualties', names=c('Female','Male'), main='Male vs Female passenger casualties',col=c("orange","light blue"))
 
-#boy vs girl passenger casualties
-boy_passengers<-subset(d, Road.User.Type=='Car passengers' & Age.Group==c('0 - 5 years','6 - 9 years','10 - 14 years','15 - 17 years') & Statistic=='All Killed and Injured Casualties (Number)' & Sex=='Male')
-girl_passengers<-subset(d, Road.User.Type=='Car passengers' & Age.Group==c('0 - 5 years','6 - 9 years','10 - 14 years','15 - 17 years') & Statistic=='All Killed and Injured Casualties (Number)' & Sex=='Female')
-boy_girl_peddiff<-boxplot(girl_passengers$value,boy_passengers$value, ylab='Casualties', names=c('Girls','Boys'), main='Boys vs Girl passenger casualties',col=c("orange","light blue"))
 
 #casualties per year for pedal cyclists...trending up!!
 x_bike<-subset(d, Statistic=='All Killed and Injured Casualties (Number)' & Road.User.Type=='Pedal cyclists')
