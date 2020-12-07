@@ -19,19 +19,8 @@ head(df)
 
 # Filter all the redundant data
 
-df.not.all_killed_injured <- df %>%
-  filter(df$Statistic != "All Killed and Injured Casualties (Number)")
-  
-df.not.all_road_users <- df.not.all_killed_injured %>%  
-  filter(df.not.all_killed_injured$Road.User.Type != "All road users")
-
-df.not.all_car_users <- df.not.all_road_users %>%  
-  filter(df.not.all_road_users$Road.User.Type != "All Car users")
-
-df.not.all_ages <- df.not.all_car_users %>%  
-  filter(df.not.all_car_users$Age.Group != 'All ages')
-
-df <- df.not.all_ages
+df <- df %>%
+  filter(df$Statistic != "All Killed and Injured Casualties (Number)"&df$Road.User.Type != "All road users"&df$Road.User.Type != "All Car users"&df$Age.Group != 'All ages')
 
 sum(df$value) #112279
 ```
