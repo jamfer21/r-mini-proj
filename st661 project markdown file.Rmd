@@ -69,7 +69,40 @@ sum(c(w$Value,w1$Value,w2$Value,w3$Value,w4$Value,w5$Value,w6$Value,w7$Value))
 ```
 According to the RSA online data revealing drivers licences numbers held by Irish drivers (https://data.cso.ie/) in 2018 there were 233187 drivers ages 17-24 on our roads. From the Casualties data we can calculate that the percentage of these drivers to be recorded killed or injured is: 27204/233187 = 0.1166617 where as when we take the total for the whole population and compare it we get : 76347/2907193 = 0.02626141. So when we compare the younger drivers to the overall population there is a 9% increase in casualties when comapared to the total amount of drivers on the roads.
 
+Lets now look at the 24-35 year olds deeper.
+```{r}
+sub6<- df[df$Age.Group == '25 - 34 years',]
 
+ggplot(data=sub6, aes(x=Age.Group, y=Value, fill=Road.User.Type), position = "fill") +
+  geom_bar(stat="identity") +
+  ggtitle("24-35 year old total casualty rates by Road User Type") +
+  scale_fill_brewer(palette="Dark2") +
+  theme_minimal()
+```
+Car drivers is the main cause of casualty for the 24-35 year olds followed by car passengers, which makes sense. Interestingly there is not much difference between pedestrians, pedal cyclists and motor cyclists for this age group, as seen from the graph below this isn't the overall case among the dataset.
+  
+```{r}
+ggplot(data=df, aes(x=Road.User.Type, y=Value, fill=Road.User.Type), position = "fill") +
+  geom_bar(stat="identity")
+```
+We further breakdown the 25-34 year olds
+```{r}
+hcols<- c('Pedestrians'="#FFDEDA", 'Pedal cyclists'="#9B94BE",'Motor cyclists'="#F9C8A0",'Car drivers'="#F28997",'Car passengers'="#C1E3FE",'Other road users'= "#FDB4C1")
+pi1<-ggplot(data=sub6) +
+  geom_col(aes(x=1, y=Value, fill=Road.User.Type), position = "fill") +
+  coord_polar(theta = "y") +
+  scale_fill_manual(values = hcols) +
+  ggtitle("24-35 year old Male and Female casualty rates by Road User Type") +
+  theme_bw() +
+  theme(axis.title = element_blank(),
+        axis.text = element_blank(),
+        axis.ticks = element_blank(),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        panel.border = element_blank()) +
+  facet_wrap(~ Sex)
+```
+Interestingly when we look into the gender differences between the 25-34 year olds, from the pie charts it is noticable that females have a much bigger proportion of Car drivers  involved in accidnets than males as well as being the larger portion of the injured car passengers also. It is noticable the wedge difference between male and female motor cyclists, a very small wedge for the females and for the males it is there 3rd or 4th largest wedge.
 ```{r}
 #male vs female passenger casualties
 male_passengers<-subset(d, Road.User.Type=='Car passengers' & Age.Group=='All ages' & Statistic=='All Killed and Injured Casualties (Number)' & Sex=='Male')
