@@ -27,18 +27,20 @@ sum(df$value) #112279
 
 ```{r}
 p<-ggplot(data=df, aes(x=Road.User.Type, y=value)) +
-  geom_bar(stat="identity")
+  geom_bar(stat="identity") +
+  coord_flip()
 p
 ```
 
 
 ```{r}
+
 ggplot(data=df, aes(x=Road.User.Type, y=value, fill=Statistic), position = "fill") +
-  geom_bar(stat="identity")
+  geom_bar(stat="identity") +
+  coord_flip()
 ```
 
 From the above, we can conclude that the Car Drivers having the highest Casualties Count.
-
 
 #### Driving Casualities by Gender per Year
 
