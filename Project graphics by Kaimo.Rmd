@@ -23,50 +23,51 @@ df4<-subset(ROA16,Statistic=="Injured Cassualties (Number)"&Age.Group!="All ages
 
 Killed Casualties divided by Year & Sex
 ```{r}
-ggplot(data = df1) + geom_bar(mapping = aes(x = Year, y=value, fill=Sex), stat="identity")
+ggplot(data = df1) + geom_col(mapping = aes(x = Year, y=value, fill=Sex))+coord_flip()
+
 ```
 
 Killed Casualties divided by Year & Road.User.Type
 ```{r}
-ggplot(data = df1) + geom_bar(mapping = aes(x = Year, y=value, fill=Road.User.Type), stat="identity")
+ggplot(data = df1) + geom_col(mapping = aes(x = Year, y=value, fill=Road.User.Type))+coord_flip()
 ```
 
 Killed Casualties divided by Year & Age.Group
 ```{r}
-ggplot(data = df3) + geom_bar(mapping = aes(x = Year, y=value, fill=Age.Group), stat="identity")
+ggplot(data = df3) + geom_col(mapping = aes(x = Year, y=value, fill=Age.Group))+coord_flip()
 ```
 
 Killed Casualties divided by Road.User.Type & Sex
 ```{r}
-ggplot(data = df1) + geom_bar(mapping = aes(x = Road.User.Type, y=value, fill=Sex), stat="identity")
+ggplot(data = df1) + geom_col(mapping = aes(x = Road.User.Type, y=value, fill=Sex))+coord_flip()
 ```
 
 Killed Casualties divided by Age.Group & Sex
 ```{r}
-ggplot(data = df3) + geom_bar(mapping = aes(x = Age.Group, y=value, fill=Sex), stat="identity")
+ggplot(data = df3) + geom_col(mapping = aes(x = Age.Group, y=value, fill=Sex))+coord_flip()
 ```
 
 Injured Cassualties divided by Year & Sex
 ```{r}
-ggplot(data = df2) + geom_bar(mapping = aes(x = Year, y=value, fill=Sex), stat="identity")
+ggplot(data = df2) + geom_col(mapping = aes(x = Year, y=value, fill=Sex))+coord_flip()
 ```
 
 Injured Cassualties divided by Year & Road.User.Type
 ```{r}
-ggplot(data = df2) + geom_bar(mapping = aes(x = Year, y=value, fill=Road.User.Type), stat="identity")
+ggplot(data = df2) + geom_col(mapping = aes(x = Year, y=value, fill=Road.User.Type))+coord_flip()
 ```
 
 Injured Cassualties divided by Year & Age.Group
 ```{r}
-ggplot(data = df4) + geom_bar(mapping = aes(x = Year, y=value, fill=Age.Group), stat="identity")
+ggplot(data = df4) + geom_col(mapping = aes(x = Year, y=value, fill=Age.Group))+coord_flip()
 ```
 
 Injured Cassualties divided by Road.User.Type & Sex
 ```{r}
-ggplot(data = df2) + geom_bar(mapping = aes(x = Road.User.Type, y=value, fill=Sex), stat="identity")
+ggplot(data = df2) + geom_col(mapping = aes(x = Road.User.Type, y=value, fill=Sex))+coord_flip()
 ```
 
 Injured Cassualties divided by Age.Group & Sex
 ```{r}
-ggplot(data = df4) + geom_bar(mapping = aes(x = Age.Group, y=value, fill=Sex), stat="identity")
+ggplot(data = df4) + geom_col(mapping = aes(x = Age.Group, y=value, fill=Sex))+coord_flip()
 ```
