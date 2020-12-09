@@ -31,6 +31,9 @@ str(df)
 #check for na's
 sapply(df, function(x) which(is.na(x)))
 
+df <- df %>%
+  filter(df$Statistic != "All Killed and Injured Casualties (Number)"&df$Road.User.Type != "All road users"&df$Road.User.Type != "All Car users"&df$Age.Group != 'All ages')
+
 ```
 
 ## Visual Analysis
