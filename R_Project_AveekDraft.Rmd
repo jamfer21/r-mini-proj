@@ -57,7 +57,7 @@ ggplot(data=df, aes(x=Age.Group, y=value, fill=Road.User.Type), position = "fill
 ```
 
 We can see from the first plot the 25-34 year olds are by far the highest category in terms of casualties in this dataset. Here we are going to look deeper into the younger casualties on Irish roads.
-```{r}
+```{r, echo=False}
 library(ggplot2)
 
  s4<- df[df$Statistic=='Injured Cassualties (Number)' & (df$Road.User.Type == 'Car drivers' | df$Road.User.Type=='Motor cyclists'| df$Road.User.Type=='Pedal cyclists') & (df$Age.Group == '15 - 17 years' | df$Age.Group == '18 - 20 years' | df$Age.Group == '21 - 24 years' | df$Age.Group == '25 - 34 years'),]
@@ -105,44 +105,21 @@ grid.arrange(p17,p18,layout_matrix = rbind(c(1, 2)))
 
 We further breakdown the 25-34 year olds
 
-```{r}
+```{r, echo=False}
 library(ggplot2)
 
-sub6<- df[df$Age.Group == '25 - 34 years',]
+
+sub10<-df[(df$Road.User.Type!="Pedestrians" & df$Road.User.Type!="Other road users") & (df$Age.Group=="25 - 34 years" | df$Age.Group=="21 - 24 years"),]
+ggplot(sub10,aes(Year,Road.User.Type))+
+  geom_tile(aes(fill=value),colour="white",)+
+  scale_fill_gradient(low="light blue",high = "dark blue")+
+  xlab("Year")+
+  ylab("Road User Type")+
+  ggtitle("Road User Type vs Year for 21-34 year olds") +
+  guides(fill=FALSE) 
 
 
-hcols<- c('Pedestrians'="#FFDEDA", 'Pedal cyclists'="#9B94BE",'Motor cyclists'="#F9C8A0",'Car drivers'="#F28997",'Car passengers'="#C1E3FE",'Other road users'= "#FDB4C1")
-pi1<-ggplot(data=sub6) +
-  geom_col(aes(x=1, y=value, fill=Road.User.Type), position = "fill") +
-  coord_polar(theta = "y") +
-  scale_fill_manual(values = hcols) +
-  ggtitle("24-35 year old casualty rates") +
-  theme_bw() +
-  theme(axis.title = element_blank(),
-        axis.text = element_blank(),
-        axis.ticks = element_blank(),
-        panel.grid.major = element_blank(),
-        panel.grid.minor = element_blank(),
-        panel.border = element_blank(),
-        legend.title = element_text(size = 8)) +
-  facet_wrap(~ Sex)
 
-pi2<-ggplot(data=df) +
-  geom_col(aes(x=1, y=value, fill=Road.User.Type), position = "fill") +
-  coord_polar(theta = "y") +
-  scale_fill_manual(values = hcols) +
-  ggtitle("Total population") +
-  theme_bw() +
-  theme(axis.title = element_blank(),
-        axis.text = element_blank(),
-        axis.ticks = element_blank(),
-        panel.grid.major = element_blank(),
-        panel.grid.minor = element_blank(),
-        panel.border = element_blank(),
-        legend.title = element_text(size = 8)) +
-  facet_wrap(~ Sex)
-
-grid.arrange(pi1,pi2,layout_matrix = rbind(c(1, 1),c(2,2)))
 
 ```
 
@@ -150,11 +127,15 @@ grid.arrange(pi1,pi2,layout_matrix = rbind(c(1, 1),c(2,2)))
 Interestingly when we look into the gender differences between the 25-34 year olds, from the pie charts it is noticable that females have a much bigger proportion of Car drivers  involved in accidents than males as well as being the larger portion of the injured car passengers also. It is noticable the wedge difference between male and female motor cyclists, a very small wedge for the females and for the males it is there 3rd or 4th largest wedge. 
 
 We see from the linear model below that an increase in female drivers by one it would result in a decrease in Value by 17.96, when taking into account Car drivers, passengers and motor cyclists. The p-value for SexFemale > 0.05 though so we remove this variable as it isnt statistcally strong enough for the model. The second linear model says that an increase in passengers and drivers on the road would results in greater casualty values.
-```{r}
+```{r,echo=False}
 sub7<- df[(df$Road.User.Type=='Car drivers'| df$Road.User.Type=='Car passengers' | df$Road.User.Type=='Motor cyclists') & df$Age.Group == '25 - 34 years',]
 
 f<-lm(value~Statistic+Road.User.Type+Sex, data=sub7) 
-summary(f) #Sex pvalue >0.05 so..
+summary(f)
+```
+Sex pvalue >0.05 so..
+
+```{r}
 f<-lm(value~Statistic+Road.User.Type, data=sub7) 
 summary(f)
 
@@ -252,6 +233,43 @@ df3<-subset(ROA16,Statistic=="Killed Casualties (Number)"&Age.Group!="All ages"&
 df4<-subset(ROA16,Statistic=="Injured Cassualties (Number)"&Age.Group!="All ages"&Road.User.Type == "All road users")
 ```
 
+```{r, echo=False}
+sub6<- df[df$Age.Group == '25 - 34 years',]
+hcols<- c('Pedestrians'="#FFDEDA", 'Pedal cyclists'="#9B94BE",'Motor cyclists'="#F9C8A0",'Car drivers'="#F28997",'Car passengers'="#C1E3FE",'Other road users'= "#FDB4C1")
+pi1<-ggplot(data=sub6) +
+  geom_col(aes(x=1, y=value, fill=Road.User.Type), position = "fill") +
+  coord_polar(theta = "y") +
+  scale_fill_manual(values = hcols) +
+  ggtitle("24-35 year old casualty rates") +
+  theme_bw() +
+  theme(axis.title = element_blank(),
+        axis.text = element_blank(),
+        axis.ticks = element_blank(),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        panel.border = element_blank(),
+        legend.title = element_text(size = 8)) +
+  facet_wrap(~ Sex)
+
+pi2<-ggplot(data=df) +
+  geom_col(aes(x=1, y=value, fill=Road.User.Type), position = "fill") +
+  coord_polar(theta = "y") +
+  scale_fill_manual(values = hcols) +
+  ggtitle("Total population") +
+  theme_bw() +
+  theme(axis.title = element_blank(),
+        axis.text = element_blank(),
+        axis.ticks = element_blank(),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        panel.border = element_blank(),
+        legend.title = element_text(size = 8)) +
+  facet_wrap(~ Sex)
+
+grid.arrange(pi1,pi2,layout_matrix = rbind(c(1, 1),c(2,2)))
+
+```
+
 Killed Casualties divided by Age.Group & Sex
 ```{r}
 ggplot(data = df3) + geom_col(mapping = aes(x = Age.Group, y=value, fill=Sex))+coord_flip()
@@ -270,4 +288,5 @@ ggplot(data = df1) + geom_col(mapping = aes(x = Year, y=value, fill=Sex))+coord_
 Injured Cassualties divided by Year & Gender
 ```{r}
 ggplot(data = df2) + geom_col(mapping = aes(x = Year, y=value, fill=Sex))+coord_flip()
+
 ```
