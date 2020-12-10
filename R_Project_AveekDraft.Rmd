@@ -10,7 +10,12 @@ knitr::opts_chunk$set(echo = TRUE)
 # {.tabset}
 ## Introduction 
 
-This project aims to analyze road accident casualties in Ireland from 2005-2018. The analysis will include a variety of comparisons between different kinds of road users, of a range of age groups, across both genders.
+__Objective:__ This report will look at the road accident casualties between Males and Females, in Ireland for the years 2005 to 2018, the dataset is broken down into different cohorts (age group, road user type). Included in the dataset is the severity of the accident (injured or killed). There is no spatial data represented in the dataset so accident location cannot be deemed to be a contributing factor.
+
+What we set out to do was determine if there were any differences between the genders, age groups or different road user types. We referred to outside data, specifically the RSA and CSO for figures on drivers licenses in issue in 2018 and the population numbers to aid our data analysis and draw conclusions. We also attempt to predict these trends into the future. 
+
+
+Some of the generally held views are that young men get killed a lot on the roads. Another would be that women are involved in a lot of non-fatal accidents. We have produced several charts plotting the relationship between road user type, genders and age groups and we have conducted data analysis on the data set to try and answer our initial questions and identify trends in casualty rates of different cohorts. We'll produce graphical explanations for these trends and ultimately through predictive analysis, determine what directions these trends seem to be heading towards in the future. 
 
 __Objective:__ The goal of this project is to determine trends in casualty rates of different cohorts, produce graphical explanations for these trends and ultimately through predictive analysis, determine what directions these trends seem to be heading towards in the future. 
 
