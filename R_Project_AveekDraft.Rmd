@@ -45,44 +45,124 @@ sum(df$value) #112279
 
 
 
-```{r}
+```{r, echo=F}
 library(ggplot2)
+
 ggplot(data=df, aes(x=Age.Group, y=value, fill=Statistic), position = "fill") +
   geom_bar(stat="identity") +
   coord_flip()
 
-ggplot(data=df, aes(x=Age.Group, y=value, fill=Road.User.Type), position = "fill") +
-  geom_bar(stat="identity") +
-  coord_flip()
-```
-
-We can see from the first plot the 25-34 year olds are by far the highest category in terms of casualties in this dataset. Here we are going to look deeper into the younger casualties on Irish roads.
-```{r, echo=False}
-library(ggplot2)
-
- s4<- df[df$Statistic=='Injured Cassualties (Number)' & (df$Road.User.Type == 'Car drivers' | df$Road.User.Type=='Motor cyclists'| df$Road.User.Type=='Pedal cyclists') & (df$Age.Group == '15 - 17 years' | df$Age.Group == '18 - 20 years' | df$Age.Group == '21 - 24 years' | df$Age.Group == '25 - 34 years'),]
-ggplot(s4, aes(x=Road.User.Type,y=value, fill=Road.User.Type)) +
-  geom_col() +
-  ggtitle("Younger casualties") +
-  scale_fill_manual(values = c("#8489EF", "#E7B800", "#AC1E07")) + 
-  facet_wrap(~Age.Group,scale="free_y")
-
 w<-df[df$Age.Group=='15 - 17 years',]
 w1<-df[df$Age.Group=='18 - 20 years',]
 w2<-df[df$Age.Group=='21 - 24 years',]
-sum(c(w$Value,w1$Value,w2$Value))
-w3<-df[df$Age.Group=='24 - 34 years',]
+w3<-df[df$Age.Group=='25 - 34 years',]
 w4<-df[df$Age.Group=='35 - 44 years',]
 w5<-df[df$Age.Group=='45 - 54 years',]
 w6<-df[df$Age.Group=='55 - 64 years',]
 w7<-df[df$Age.Group=='65 years and over',]
-sum(c(w$value,w1$value,w2$value,w3$value,w4$value,w5$value,w6$value,w7$value))
+
+avgs<-c(mean(w$value),mean(w1$value),mean(w2$value),mean(w3$value),mean(w4$value),mean(w5$value),mean(w6$value),mean(w7$value))
+age_groups<-c('15 - 17','18 - 20','21 - 24','25 - 34','35 - 44','45 - 54', '55 - 64','65+')
+
+data.frame(age_groups,avgs)
 ```
 
-According to the RSA online data revealing drivers licences numbers held by Irish drivers (https://data.cso.ie/) in 2018 there were 233187 drivers ages 17-24 on our roads. From the Casualties data we can calculate that the percentage of these drivers to be recorded killed or injured is: 27204/233187 = 0.1166617 where as when we take the total for the whole population and compare it we get : 76347/2907193 = 0.02626141. So when we compare the younger drivers to the overall population there is a 9% increase in casualties when comapared to the total amount of drivers on the roads.
+From the graph above first of all we can see that it is far more common for a casualty on the road to be just an injury rather than resulting in someone being killed. We then notice that the graph shows clearly a much higher rate of casualty for the two age categories 25-34 and 35-44 years. Upon first observation we feel like this would be mainly due to the fact that there are simply more Road users in these age categories after all there is a smaller age gap between the younger cohorts than the older ones, meaning statistically it would make sense for more accidents to occur in these cohorts.
 
-Lets now look at the 24-35 year olds deeper.
+The data frame gives the average male or female, Killed or Injured casualty per year for the different age groups. As we can see the average for the 25-34 year olds more than double the other cohorts, except the 35-44 year olds.
+
+Here we are going to look deeper into the younger casualties on Irish roads and determine if they in fact are the more dangrous drivers as their insurance companies lead them to believe.
+
+```{r, echo=FALSE}
+library(ggplot2)
+
+ s4<- df[df$Statistic=='Injured Cassualties (Number)' & (df$Road.User.Type == 'Car drivers' | df$Road.User.Type=='Motor cyclists'| df$Road.User.Type=='Pedal cyclists' | df$Road.User.Type=='Car passengers') & (df$Age.Group == '15 - 17 years' | df$Age.Group == '18 - 20 years' | df$Age.Group == '21 - 24 years' | df$Age.Group == '25 - 34 years'),]
+ggplot(s4, aes(x=Road.User.Type,y=value, fill=Road.User.Type)) +
+  geom_col() +
+  ggtitle("Younger casualties") +
+  scale_fill_manual(values = c("#8489EF", "#E7B800", "#AC1E07","#F45788")) + 
+  facet_wrap(~Age.Group,scale="free_y")
+```
+
+So we can determine that the main cause of casualties among the younger road users is from car accidents. Notably the youngest group in the graph above being a car passenger is the biggest cause of casualty for the 15-17 year olds. 
+Upon inspection of the values on the y-axis of these graphs, the car drivers in the 25-34 year olds are by far the highest producer of casualties (~11,000).
+There is an even match-up comparing car drivers and passengers for the 18-20 year olds,  which fits in with the idea that there is bound to be a large amount of 18-20 year olds being passengers in cars with unexperienced drivers (other 18-20 year olds).
+
+```{r, echo=FALSE}
+library(ggplot2)
+
+
+sub10<-df[(df$Road.User.Type!="Pedestrians" & df$Road.User.Type!="Other road users") & (df$Age.Group=="25 - 34 years" | df$Age.Group=="21 - 24 years"),]
+ggplot(sub10,aes(Year,Road.User.Type))+
+  geom_tile(aes(fill=value),colour="white",)+
+  scale_fill_gradient(low="light blue",high = "dark blue")+
+  xlab("Year")+
+  ylab("Road User Type")+
+  ggtitle("Road User Type vs Year for 21-34 year olds") +
+  guides(fill=FALSE) 
+
+
+```
+
+Above the heatmap for 21-34 year olds grouped together gives shows the domination of the Car drivers category in terms of casualties, the darkest colour in 2009 allows us to see that this was a particularly bad year casualty-wise. On a lighter note the values lower now than they were at this peak in 2009, as indicated by the lighter shades of blue. 
+Interestingly pedal cyclists seem to be getting involved in more accidents as their colour ramp gets darker as we move along the graph from 2005 to 2018.
+
 ```{r}
+sub7<- df[(df$Road.User.Type=='Car drivers')  & (df$Age.Group == '18 - 20 years'|df$Age.Group == '21 - 24 years'| df$Age.Group == '25 - 34 years'),]
+
+f<-lm(value~Statistic+Sex+Age.Group, data=sub7) 
+summary(f)
+```
+In the linear model above we see the SexFemale column is insignificant at a confidence level.The model shows significance for the other values we put in to it, before interpretting these we much remove the Sex value due to its insignificance.
+
+```{r}
+f<-lm(value~Statistic+Age.Group, data=sub7) 
+summary(f)
+
+```
+Now this second linear model without the gender input shows us predicted values in the Estimate comlumn for b0,b1,b2,b3. The interesting values of this linesr model are the age group categories and the model says that for for a one unit(person) rise in people aged 25-34 we expect an increase in casualties by 136.25, where as only a rise of 27.13 for an increase of one unit of people aged 21-24. 
+This is interesting as it backs up the original claim that the most dangerous drivers are belonging to the 25-34 year old cohort. 
+
+```{r}
+RSA_data <- read_csv("RSA_data.csv")
+rsatot_allages<- RSA_data[RSA_data$Year=="2018" & RSA_data$`Age Group`=="All ages",]
+rsatot_young<- RSA_data[RSA_data$Year=="2018" & (RSA_data$`Age Group`=="17 - 20 years" | RSA_data$`Age Group`=="21 - 24 years"),]
+
+
+
+sum_all<-sum(rsatot_allages$VALUE)
+sum_young<-sum(rsatot_young$VALUE)
+
+young_total<-sum(c(w$value,w1$value,w2$value))
+all_total<-sum(c(w$value,w1$value,w2$value,w3$value,w4$value,w5$value,w6$value,w7$value))
+
+all_total/sum_all
+young_total/sum_young
+
+rsatot_older<- RSA_data[RSA_data$Year=="2018" & RSA_data$`Age Group`=="30 - 39 years",]
+sum_older<-sum(rsatot_older$VALUE)
+
+older_total<-sum(w3$value) #here w3 is the 25-34 year olds
+older_total/sum_older
+
+```
+
+
+The calculations above show that according to the RSA (https://data.cso.ie/), in 2018 there was 233,187 drivers aged 17-24 with Irish licenses (full or provisional) on our roads.
+Using values from the Casualties data, calculated that the proportion of these drivers to be recorded killed or injured was = ~0.1166, hence about 1 in 9 drivers 17-24 were classified as injured or killed, thankfully of this number the big majority was injured as seen earlier (this statistic is not taking into account those who were unlucky enough to be a casualty twice in 2018).
+Now when we do this calculation for the whole population we get the much smaller proportion of ~0.0347 or about 1 in 29 drivers of the total driving population.
+ 
+So when we compare the younger drivers to the overall population they are about 3 times more likely to become a casualty from driving a car. 
+
+
+<<older_total<-sum(w3$value) #here w3 is the 25-34 year olds>>
+<<older_total/sum_older>>
+This code above was just done in order to slightly clarify the fact that the younger drivers present more of a danger on the roads, the data doesnt match up, it is dividing the casualties for 24-35 year olds by the total irish 30-39 year olds, which gives a proportion of ~0.0396. Since the RSA data and the casualty data didnt quite match up this is the closest we can do.
+
+
+### Road User Type Analysis
+
+```{r, echo=FALSE}
 library(ggplot2)
 library(gridExtra)
 library(viridis)
@@ -103,45 +183,6 @@ p18<-ggplot(data=sub6, aes(x=Age.Group, y=value, fill=Road.User.Type), position 
 grid.arrange(p17,p18,layout_matrix = rbind(c(1, 2)))
 ```
 
-We further breakdown the 25-34 year olds
-
-```{r, echo=False}
-library(ggplot2)
-
-
-sub10<-df[(df$Road.User.Type!="Pedestrians" & df$Road.User.Type!="Other road users") & (df$Age.Group=="25 - 34 years" | df$Age.Group=="21 - 24 years"),]
-ggplot(sub10,aes(Year,Road.User.Type))+
-  geom_tile(aes(fill=value),colour="white",)+
-  scale_fill_gradient(low="light blue",high = "dark blue")+
-  xlab("Year")+
-  ylab("Road User Type")+
-  ggtitle("Road User Type vs Year for 21-34 year olds") +
-  guides(fill=FALSE) 
-
-
-
-
-```
-
-
-Interestingly when we look into the gender differences between the 25-34 year olds, from the pie charts it is noticable that females have a much bigger proportion of Car drivers  involved in accidents than males as well as being the larger portion of the injured car passengers also. It is noticable the wedge difference between male and female motor cyclists, a very small wedge for the females and for the males it is there 3rd or 4th largest wedge. 
-
-We see from the linear model below that an increase in female drivers by one it would result in a decrease in Value by 17.96, when taking into account Car drivers, passengers and motor cyclists. The p-value for SexFemale > 0.05 though so we remove this variable as it isnt statistcally strong enough for the model. The second linear model says that an increase in passengers and drivers on the road would results in greater casualty values.
-```{r,echo=False}
-sub7<- df[(df$Road.User.Type=='Car drivers'| df$Road.User.Type=='Car passengers' | df$Road.User.Type=='Motor cyclists') & df$Age.Group == '25 - 34 years',]
-
-f<-lm(value~Statistic+Road.User.Type+Sex, data=sub7) 
-summary(f)
-```
-Sex pvalue >0.05 so..
-
-```{r}
-f<-lm(value~Statistic+Road.User.Type, data=sub7) 
-summary(f)
-
-```
-
-### Road User Type Analysis
 
 ```{r, echo=FALSE}
 p<-ggplot(data=df, aes(x=Road.User.Type, y=value)) +
@@ -233,7 +274,7 @@ df3<-subset(ROA16,Statistic=="Killed Casualties (Number)"&Age.Group!="All ages"&
 df4<-subset(ROA16,Statistic=="Injured Cassualties (Number)"&Age.Group!="All ages"&Road.User.Type == "All road users")
 ```
 
-```{r, echo=False}
+```{r, echo=FALSE}
 sub6<- df[df$Age.Group == '25 - 34 years',]
 hcols<- c('Pedestrians'="#FFDEDA", 'Pedal cyclists'="#9B94BE",'Motor cyclists'="#F9C8A0",'Car drivers'="#F28997",'Car passengers'="#C1E3FE",'Other road users'= "#FDB4C1")
 pi1<-ggplot(data=sub6) +
@@ -269,6 +310,9 @@ pi2<-ggplot(data=df) +
 grid.arrange(pi1,pi2,layout_matrix = rbind(c(1, 1),c(2,2)))
 
 ```
+Interestingly when we look into the gender differences between the 25-34 year olds, from the pie charts it is noticable that females have a much bigger proportion of Car drivers  involved in accidents than males as well as being the larger portion of the injured car passengers also. It is noticable the wedge difference between male and female motor cyclists, a very small wedge for the females and for the males it is there 3rd or 4th largest wedge. 
+
+
 
 Killed Casualties divided by Age.Group & Sex
 ```{r}
@@ -290,3 +334,9 @@ Injured Cassualties divided by Year & Gender
 ggplot(data = df2) + geom_col(mapping = aes(x = Year, y=value, fill=Sex))+coord_flip()
 
 ```
+
+## Conclusion
+
+Upon first inspection of the data it was strinkingly evident that the 'worst' age category for casualties on Irish roads was the 25-34 year olds, but upon further analysis this seemed not to fully be the case, yes they are the cohort that produces the largest value, but as we saw from the analysis using the RSA data, in fact the younger drivers (17-24) were nearly three times more likely to become a casualty due to driving a car.
+Some things we discovered just simply backed up intuition, like there was far more 15-17 year olds involved in accidents as car passengers as for any other form of road use.  Due to the data not matching up from the RSA and the casualty rates we couldnt not fully judge the difference between the 17-24 and the 24-35 year olds, although the analysis that was done did show that the younger cohorts group was still ~3 times larger than the averaged two groups.
+
