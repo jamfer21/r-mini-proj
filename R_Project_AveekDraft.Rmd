@@ -55,11 +55,7 @@ ggplot(data=df, aes(x=Age.Group, y=value, fill=Road.User.Type), position = "fill
   geom_bar(stat="identity") +
   coord_flip()
 ```
-```{r}
-ROA16<-as.data.frame(read.px("ROA16.px"))
-df3<-subset(ROA16,Statistic=="Killed Casualties (Number)"&Age.Group!="All ages"&Road.User.Type == "All road users")
-ggplot(data = df3) + geom_col(mapping = aes(x = Age.Group, y=value, fill=Sex))+coord_flip()
-```
+
 We can see from the first plot the 25-34 year olds are by far the highest category in terms of casualties in this dataset. Here we are going to look deeper into the younger casualties on Irish roads.
 ```{r}
 library(ggplot2)
@@ -245,3 +241,12 @@ ggplot(data=df, aes(x=Age.Group, y=value, fill=Statistic), position = "fill") +
 The age group containing 25-34 years has the highest number of casualities.
 
 From the above we can conclude that the Road User Type of Pedal Cyclist has an increasing trend of casualties over the years. However, the proportions of fatalities is minimum.
+
+### Gender Analysis
+
+```{r}
+ROA16<-as.data.frame(read.px("ROA16.px"))
+df3<-subset(ROA16,Statistic=="Killed Casualties (Number)"&Age.Group!="All ages"&Road.User.Type == "All road users")
+ggplot(data = df3) + geom_col(mapping = aes(x = Age.Group, y=value, fill=Sex))+coord_flip()
+```
+
