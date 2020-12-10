@@ -156,9 +156,9 @@ summary(f)
 
 ```
 
-### Further analysis
+### Road User Type Analysis
 
-```{r}
+```{r, echo=FALSE}
 p<-ggplot(data=df, aes(x=Road.User.Type, y=value)) +
   geom_bar(stat="identity") +
   coord_flip()
@@ -166,7 +166,7 @@ p
 ```
 
 
-```{r}
+```{r, echo=FALSE}
 
 ggplot(data=df, aes(x=Road.User.Type, y=value, fill=Statistic), position = "fill") +
   geom_bar(stat="identity") +
@@ -175,9 +175,9 @@ ggplot(data=df, aes(x=Road.User.Type, y=value, fill=Statistic), position = "fill
 
 From the above, we can conclude that the Car Drivers having the highest Casualties Count.
 
-Driving Casualities by Gender per Year
+Driving Casualties by Gender per Year
 
-```{r}
+```{r, echo=FALSE}
 df.female = df[df$Sex == 'Female',]
 sum.female <- aggregate(value~Year, df.female, sum)
 
@@ -204,7 +204,7 @@ prop.male
 
 Proportion of Male and Female Car Driving Death Casualties Trend over 14 years.
 
-```{r}
+```{r, echo=FALSE}
 df.killed.female.car_drivers = df[df$Statistic =='Killed Casualties (Number)' & df$Road.User.Type == "Car drivers" & df$Sex == 'Female', ]
 sum.killed.female.car_drivers <- aggregate(value~Year, df.killed.female.car_drivers, sum)
 
@@ -226,9 +226,9 @@ killed.male.prop = round(sum.killed.male.car_drivers$value/sum.male.car_drivers$
 killed.male.prop
 ```
 
-Categorical Count of AGe Group WIse Casualties for 14 years.
+Categorical Count of Age Group Wise Casualties for 14 years.
 
-```{r}
+```{r, echo=FALSE}
 ggplot(data=df, aes(x=Age.Group, y=value, fill=Statistic), position = "fill") +
   geom_bar(stat="identity")
 ```
