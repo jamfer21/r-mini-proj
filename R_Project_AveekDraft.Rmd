@@ -250,3 +250,7 @@ df3<-subset(ROA16,Statistic=="Killed Casualties (Number)"&Age.Group!="All ages"&
 ggplot(data = df3) + geom_col(mapping = aes(x = Age.Group, y=value, fill=Sex))+coord_flip()
 ```
 
+```{r}
+df4<-subset(ROA16,Statistic=="Injured Cassualties (Number)"&Age.Group!="All ages"&Road.User.Type == "All road users")
+ggplot(data = df4) + geom_col(mapping = aes(x = Age.Group, y=value, fill=Sex))+coord_flip()
+```
