@@ -55,7 +55,11 @@ ggplot(data=df, aes(x=Age.Group, y=value, fill=Road.User.Type), position = "fill
   geom_bar(stat="identity") +
   coord_flip()
 ```
-
+```{r}
+ROA16<-as.data.frame(read.px("ROA16.px"))
+df3<-subset(ROA16,Statistic=="Killed Casualties (Number)"&Age.Group!="All ages"&Road.User.Type == "All road users")
+ggplot(data = df3) + geom_col(mapping = aes(x = Age.Group, y=value, fill=Sex))+coord_flip()
+```
 We can see from the first plot the 25-34 year olds are by far the highest category in terms of casualties in this dataset. Here we are going to look deeper into the younger casualties on Irish roads.
 ```{r}
 library(ggplot2)
