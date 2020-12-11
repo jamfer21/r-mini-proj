@@ -198,8 +198,17 @@ ggplot(data=df, aes(x=Road.User.Type, y=value, fill=Statistic), position = "fill
   geom_bar(stat="identity") +
   coord_flip()
 ```
-
 From the above, we can conclude that the Car Drivers having the highest Casualties Count.
+
+Bicycle casualties 
+```{r, echo=FALSE}
+library("ggplot2")
+x_bike<-subset(df,Road.User.Type=='Pedal cyclists')
+x1_bike<-x_bike$value
+y_bike<-x_bike$Year
+ggplot(data=x_bike, aes(Year, value, fill=Age.Group)) +ggtitle("Bicycle casualties") + geom_point()+ geom_col() + theme_light()
+```
+What we are seeing are increasing numbers of cyclists taking to the roads, and unfortunately this had lead to an increasing volume of accidents involving cyclists and consequently their increasing numbers in the road accident statistics.
 
 Driving Casualties by Gender per Year
 
